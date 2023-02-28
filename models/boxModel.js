@@ -8,6 +8,7 @@ const boxSchema = new mongoose.Schema({
         required: [true, 'A box must have a code'],
     },
     product: {
+        // ref from the other DB boxCode
         required: [true, 'A box must have a product'],
         productCode: String,
         modelName: String,

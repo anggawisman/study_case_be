@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const rackSchema = new mongoose.schema(
+const rackSchema = new mongoose.Schema(
     {
         rackCode: {
             type: String,
@@ -9,7 +9,7 @@ const rackSchema = new mongoose.schema(
             required: [true, 'A Rack must have a Code']
         },
         coordinate: {
-            required: [true, 'A Rack must have a coordinate'],
+
             x: {
                 type: Number,
                 required: [true, 'A Rack must have a coordinate X'],

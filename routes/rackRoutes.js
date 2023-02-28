@@ -6,4 +6,6 @@ const router = express.Router();
 
 
 
-router.route('/scan/:id').get(rackController.getProductDetail)
+router.route('/').post(rackController.createRack)
+
+module.exports = router;

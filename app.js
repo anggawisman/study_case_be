@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 
 // REQUIRE SECURITY
 // const helmet = require('helmet');
@@ -8,7 +9,7 @@ const express = require('express');
 
 // -------- REQUIRE CUSTOM MODULE -------- //
 const AppError = require('./utils/appError');
-const rackRoutes = require('./routes/rackRoutes')
+const rackRouter = require('./routes/rackRoutes')
 
 // ----------------- DEFINE EXPRESS AS APP ----------------------- //
 const app = express();
@@ -22,7 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // -------------- ROUTES -------------------- //
 // API Routes is divide it to routes folder
-app.use('/api/v1/racks', rackRoutes); // parent route, prevent for update we use v1
+app.use('/api/v1/racks', rackRouter); // parent route, prevent for update we use v1
 
 
 

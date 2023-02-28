@@ -37,13 +37,16 @@ exports.inbound = catchAsync(async (req, res, next) => {
         // CHECK THIS OUT
         lastCallBy: "-"
 
-
     })
 
     res.status(200).json({
         status: 'success',
         data: { inboundBox }
     });
+
+})
+
+exports.generateTask = catchAsync(async (req, res, next) => {
 
 })
 

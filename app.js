@@ -8,7 +8,7 @@ const express = require('express');
 
 // -------- REQUIRE CUSTOM MODULE -------- //
 const AppError = require('./utils/appError');
-const inboundRoutes = require('./routes/inboundRoutes')
+const rackRoutes = require('./routes/rackRoutes')
 
 // ----------------- DEFINE EXPRESS AS APP ----------------------- //
 const app = express();
@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // -------------- ROUTES -------------------- //
 // API Routes is divide it to routes folder
-app.use('/api/v1/inbound', inboundRoutes); // parent route, prevent for update we use v1
+app.use('/api/v1/racks', rackRoutes); // parent route, prevent for update we use v1
 
 
 

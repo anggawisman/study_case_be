@@ -14,13 +14,14 @@ const rackSchema = new mongoose.Schema(
                 type: Number,
                 required: [true, 'A Rack must have a coordinate X'],
             },
-            Y: {
+            y: {
                 type: Number,
                 required: [true, 'A Rack must have a coordinate Y'],
             },
         },
         index: Number,
         content: {
+            default: "-",
             type: mongoose.Schema.ObjectId,
             ref: 'Box',
         },

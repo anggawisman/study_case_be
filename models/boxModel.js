@@ -17,7 +17,7 @@ const boxSchema = new mongoose.Schema({
     },
     scan_dt: { type: Date, default: Date.now },
     in_station: String,
-    release_dt: [Date],
+    release_dt: Date,
     out_station: String,
     status: {
         type: String,
@@ -27,11 +27,14 @@ const boxSchema = new mongoose.Schema({
             message: 'Status is either: process, in_storage, or out',
         },
     },
-    lastCallBy: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: [true, 'Review must belong to a user.'],
-    }
+
+
+    // CHECK IT ASAP
+    // lastCallBy: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'User',
+    //     required: [true, 'Review must belong to a user.'],
+    // }
 })
 
 

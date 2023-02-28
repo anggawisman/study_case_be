@@ -3,9 +3,10 @@ const boxController = require('../controllers/boxController');
 
 const router = express.Router();
 
-router.route('/').post(boxController.createBox).get(boxController.getAllBoxs)
+router.get('/', boxController.getAllBoxes)
 
-// GET PRODUCT FROM API
-router.route('/:productCode/scan').get(boxController.scanBarcode)
+// INBOUND CREATE BOX WITH PRODUCT DATA FROM API
+router.post('/inbound/product/:productCode/station/:station', boxController.inbound)
+router.patch('/outbound/product/:productCode/station/:station', boxController.outbound)
 
 module.exports = router;

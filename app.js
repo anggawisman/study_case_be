@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 
-// REQUIRE SECURITY
+// -------- REQUIRE SECURITY -------- //
 // const helmet = require('helmet');
 // const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
@@ -10,6 +10,7 @@ const morgan = require('morgan');
 // -------- REQUIRE CUSTOM MODULE -------- //
 const AppError = require('./utils/appError');
 const rackRouter = require('./routes/rackRoutes')
+const boxRouter = require('./routes/boxRoutes')
 
 // ----------------- DEFINE EXPRESS AS APP ----------------------- //
 const app = express();
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 // -------------- ROUTES -------------------- //
 // API Routes is divide it to routes folder
 app.use('/api/v1/racks', rackRouter); // parent route, prevent for update we use v1
+app.use('/api/v1/box', boxRouter); // parent route
 
 
 

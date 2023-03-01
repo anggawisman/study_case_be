@@ -9,7 +9,6 @@ const rackSchema = new mongoose.Schema(
             required: [true, 'A Rack must have a Code']
         },
         coordinate: {
-
             x: {
                 type: Number,
                 required: [true, 'A Rack must have a coordinate X'],
@@ -21,9 +20,10 @@ const rackSchema = new mongoose.Schema(
         },
         index: Number,
         content: {
-            default: "-",
             type: mongoose.Schema.ObjectId,
             ref: 'Box',
+            // required: [true, 'Box must belong to a Rack.'],
+
         },
     }
 )

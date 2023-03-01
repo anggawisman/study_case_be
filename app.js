@@ -8,6 +8,7 @@ const morgan = require('morgan');
 // const hpp = require('hpp');
 
 // -------- REQUIRE CUSTOM MODULE -------- //
+const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const rackRouter = require('./routes/rackRoutes')
 const boxRouter = require('./routes/boxRoutes')
@@ -15,12 +16,25 @@ const boxRouter = require('./routes/boxRoutes')
 // ----------------- DEFINE EXPRESS AS APP ----------------------- //
 const app = express();
 
-// ----------- MIDDLEWARE FOR LOG FOR EXPRESS ----------------- //
+// ------------------- MIDDLEWARE -------------------- //
 // Development logging | morgan will logs HTTP requests
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+// Body parser, reading data from body into req.body
+app.use(
+    express.json({
+        limit: '10kb',
+    })
+);
+
+// // Test middleware
+// app.use((req, res, next) => {
+//     req.requestTime = new Date().toISOString();
+//     // console.log(req.headers);
+//     next();
+// });
 
 // -------------- ROUTES -------------------- //
 // API Routes is divide it to routes folder
@@ -34,6 +48,8 @@ app.all('*', (req, res, next) => { // "*" means anything
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
+// Global Operational Error Handling Middleware with Express
+app.use(globalErrorHandler);
 
 // EXPORTS THIS MODULE
 module.exports = app;

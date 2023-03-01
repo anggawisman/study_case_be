@@ -9,10 +9,10 @@ router.get('/', boxController.getAllBoxes)
 router.post('/product/:productCode', boxController.inbound)
 
 // API ROBOT CALLING
-router.patch('/:boxCode/inbound/station/:stationName/rack/:rackCode', boxController.callRobot)
+router.patch('/:boxCode/inbound/station/:stationName', boxController.callRobot)
 
 // API RECEIVE ROBOT CALLBACK
-router.patch('/:boxCode/inbound/rack/:rackCode/robot/call-back', boxController.receiveRobotCallback)
+router.patch('/:boxCode/inbound/robot/call-back', boxController.receiveRobotCallback)
 
 // OUTBOUND WITH UPDATE THE PRODUCT
 router.patch('/:boxCode/outbound/station/:stationName', boxController.outbound)

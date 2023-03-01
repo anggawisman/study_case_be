@@ -18,7 +18,7 @@ const rackSchema = new mongoose.Schema(
                 required: [true, 'A Rack must have a coordinate Y'],
             },
         },
-        index: Number,
+        index: { type: Number, unique: true },
         content: {
             type: mongoose.Schema.ObjectId,
             ref: 'Box',

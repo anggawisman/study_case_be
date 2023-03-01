@@ -46,12 +46,15 @@ exports.inbound = catchAsync(async (req, res, next) => {
 
 exports.callRobot = catchAsync(async (req, res, next) => {
     // DEFINE PARAMS FROM URL
-    const { boxCode, stationName, rackCode } = req.params;
+    const { boxCode, stationName } = req.params;
+
+    // DEFINE RACK THAT EMPTY AND THE LOWEST INDEX
+    const rack = await Rack.find({ content: null }).sort({ index: 1 }).limit(1)
 
     // VARIABLE FOR DATA THAT WILL PASS TO CALL ROBOT
     const location = {
         source: stationName,
-        destination: rackCode.toUpperCase(),
+        destination: rack[0].rackCode,
         taskCode: `TC${new Date().toISOString()}`
     }
 
@@ -61,12 +64,12 @@ exports.callRobot = catchAsync(async (req, res, next) => {
     if (callRobot === "OK") {
 
         // UPDATE BOX DATA
-        const updateBox = await Box.findOneAndUpdate({ boxCode: boxCode, in_station: stationName.split('-').join(" ").toUpperCase() })
+        const updateBox = await Box.findOneAndUpdate({ boxCode: boxCode }, { in_station: stationName.split('-').join(" ").toUpperCase() })
 
 
         res.status(200).json({
             status: 'success',
-            data: { location, Box: updateBox }
+            data: { location, Box: updateBox, robotResponse: callRobot }
         });
     }
 })
@@ -75,26 +78,33 @@ exports.callRobot = catchAsync(async (req, res, next) => {
 exports.receiveRobotCallback = catchAsync(async (req, res, next) => {
 
     // DEFINE PARAMS FROM URL
-    const { boxCode, rackCode } = req.params;
+    const { boxCode } = req.params;
 
-    // do {
-    //     // VARIABLE TO GET STATUS FROM API SO IF API RES.STATUS 200 WILL NEXT TO OTHERS TASK
-    //     const config = {
-    //         method: 'head',
-    //         url: 'http://172.16.101.213:9073/robot/sendRobotTask'
-    //     }
+    // DEFINE RACK THAT EMPTY AND THE LOWEST INDEX
+    const rack = await Rack.find({ content: null }).sort({ index: 1 }).limit(1)
 
-    //     receiveRobotStatus = await axios.get(config)
-    // }
-    // while (!receiveRobotStatus.status === 200);
-
-
-    if (req.body.status === "finished") {
+    if (req.body.status === "finished" && req.body.activity === "inbound") {
 
         // UPDATE BOX DATA
-        const updateBox = await Box.findOneAndUpdate({ boxCode: boxCode, status: "in_storage", })
+        const updateBox = await Box.findOneAndUpdate({ boxCode: boxCode }, { status: "in_storage" })
+
         // UPDATE RACK DATA
-        const updateRack = await Rack.findOneAndUpdate({ rackCode: rackCode.toUpperCase(), content: updateBox._id, })
+        const updateRack = await Rack.findOneAndUpdate({ rackCode: rack[0].rackCode }, { content: updateBox._id, })
+        // const updateRack = await Rack.findOneAndUpdate({ rackCode: req.body.rackCode, content: updateBox._id, })
+
+
+        res.status(200).json({
+            status: 'success',
+            data: { updateBox, updateRack }
+        });
+    } else if (req.body.status === "finished" && req.body.activity === "outbound") {
+
+        // UPDATE BOX DATA
+        const updateBox = await Box.findOneAndUpdate({ boxCode: boxCode }, { status: "out" })
+
+        // UPDATE RACK DATA
+        const updateRack = await Rack.findOneAndUpdate({ rackCode: rack[0].rackCode }, { content: null })
+        // const updateRack = await Rack.findOneAndUpdate({ rackCode: req.body.rackCode, content: updateBox._id, })
 
 
         res.status(200).json({

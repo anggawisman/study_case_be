@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.route('/').post(rackController.createRack).get(rackController.getAllRacks)
 
-router.route('/view').get(rackController.viewAllEmptyRacks)
+router.route('/empty').get(rackController.viewAllEmptyRacks)
+router.route('/filled').get(rackController.viewAllEmptyRacks)
 
 module.exports = router;

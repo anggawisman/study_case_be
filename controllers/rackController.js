@@ -10,13 +10,24 @@ exports.getAllRacks = factory.getAll(Rack)
 
 
 exports.viewAllEmptyRacks = catchAsync(async (req, res, next) => {
-    const view = await Rack.find({ content: null })
+    const rack = await Rack.find({ content: null })
 
 
     res.status(200).json({
         status: 'success',
         data: {
-            view,
+            rack,
+        },
+    });
+})
+exports.viewAllFilledRacks = catchAsync(async (req, res, next) => {
+    const rack = await Rack.find({ content: { $ne: null } })
+
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            rack,
         },
     });
 })

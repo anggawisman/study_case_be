@@ -1,0 +1,272 @@
+{
+	"info": {
+		"_postman_id": "108588e3-4173-495f-a026-14fba30b4d0a",
+		"name": "Case Study Angga",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22507852"
+	},
+	"item": [
+		{
+			"name": "Box",
+			"item": [
+				{
+					"name": "Inbound Box",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/api/v1/box/product/PCC2022031700032",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"v1",
+								"box",
+								"product",
+								"PCC2022031700032"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Box",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/v1/box",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"v1",
+								"box"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rack",
+			"item": [
+				{
+					"name": "Create Rack",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rackCode\": \"X1Y1\",\r\n    \"coordinate\": {\r\n        \"x\": 1,\r\n        \"y\": 1\r\n    },\r\n    \"index\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/v1/racks",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"v1",
+								"racks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Racks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/v1/racks",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"v1",
+								"racks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Empty Racks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/v1/racks/empty",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"v1",
+								"racks",
+								"empty"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Robot",
+			"item": [
+				{
+					"name": "Call Robot",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/v1/box/PCC2022031100063/inbound/station/station-laser-b/rack/x1y1",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"v1",
+								"box",
+								"PCC2022031100063",
+								"inbound",
+								"station",
+								"station-laser-b",
+								"rack",
+								"x1y1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Receive Robot Callback",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taskCode\": \"TC2023-03-01T07:48:25.631Z\",\r\n    \"status\": \"finished\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}api/v1/box/PCC2022031100063/inbound/rack/x1y1/robot/call-back",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"v1",
+								"box",
+								"PCC2022031100063",
+								"inbound",
+								"rack",
+								"x1y1",
+								"robot",
+								"call-back"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Filled Racks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}api/v1/racks/filled",
+							"host": [
+								"{{url}}api"
+							],
+							"path": [
+								"v1",
+								"racks",
+								"filled"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API from Pak Irwin",
+			"item": [
+				{
+					"name": "Get barcode detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.16.101.213:9073/datapart/barcode?barcode=PCC2022031100063",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"101",
+								"213"
+							],
+							"port": "9073",
+							"path": [
+								"datapart",
+								"barcode"
+							],
+							"query": [
+								{
+									"key": "barcode",
+									"value": "PCC2022031100063"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Robot Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"source\":\"pointA\",\r\n    \"destination\":\"pointB\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.101.213:9073/robot/sendRobotTask",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"101",
+								"213"
+							],
+							"port": "9073",
+							"path": [
+								"robot",
+								"sendRobotTask"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

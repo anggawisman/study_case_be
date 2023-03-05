@@ -12,7 +12,8 @@ router.use(authController.protect);
 router.post("/product/:productCode", boxController.inbound);
 
 // API ROBOT CALLING
-router.patch("/:boxCode/inbound/station/:stationName", boxController.callRobot);
+router.patch("/:boxCode/inbound/station/:stationName", boxController.callRobotInbound);
+router.patch("/:boxCode/outbound/station/:stationName", boxController.callRobotOutbound);
 
 // API RECEIVE ROBOT CALLBACK
 router.patch("/:boxCode/robot/call-back", boxController.receiveRobotCallback);

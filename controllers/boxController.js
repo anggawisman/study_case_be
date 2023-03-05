@@ -40,7 +40,7 @@ exports.inbound = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.callRobot = catchAsync(async (req, res, next) => {
+exports.callRobotInbound = catchAsync(async (req, res, next) => {
   // DEFINE PARAMS FROM URL
   const { boxCode, stationName } = req.params;
 
@@ -75,7 +75,48 @@ exports.callRobot = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      data: { location, Box: updateBox, robotResponse: callRobot },
+      data: { robotResponse: callRobot, location, Box: updateBox },
+    });
+  }
+});
+
+exports.callRobotOutbound = catchAsync(async (req, res, next) => {
+  // DEFINE PARAMS FROM URL
+  const { boxCode, stationName } = req.params;
+
+  const box = await Box.find({ boxCode: boxCode });
+  // DEFINE RACK BY
+  const rack = await Rack.find({ content: box._id });
+
+  // VARIABLE FOR DATA THAT WILL PASS TO CALL ROBOT
+  const location = {
+    source: stationName,
+    destination: rack.rackCode,
+    taskCode: `TC${new Date().toISOString()}`,
+  };
+
+  // CALLING ROBOT: PASS DATA FOR ROBOT TO IDENTIFY SOURCE AND DESTINATION
+  const callRobot = await axios.post(`http://localhost:9073/robot/sendRobotTask`, location).then((response) => response.data);
+
+  if (callRobot === "OK") {
+    // UPDATE BOX DATA
+    const updateBox = await Box.findOneAndUpdate(
+      { boxCode: boxCode },
+      { in_station: stationName.split("-").join(" ").toUpperCase(), release_dt: new Date().toISOString() },
+      {
+        // new option to true to return the document after update was applied.
+        new: true,
+      }
+    );
+
+    // Prevent if the
+    if (!updateBox) {
+      return next(new AppError("No Box found with that Box Code", 404));
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: { robotResponse: callRobot, location, Box: updateBox },
     });
   }
 });

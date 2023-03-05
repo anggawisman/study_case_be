@@ -20,6 +20,7 @@ const rackSchema = new mongoose.Schema({
   content: {
     type: mongoose.Schema.ObjectId,
     ref: "Box",
+    unique: true,
   },
 });
 

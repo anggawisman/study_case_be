@@ -26,11 +26,19 @@ const boxSchema = new mongoose.Schema({
   },
 
   // CHECK IT ASAP
-  // lastCallBy: {
-  //     type: mongoose.Schema.ObjectId,
-  //     ref: 'User',
-  //     required: [true, 'Review must belong to a user.'],
-  // }
+  lastCallBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: [true, "Review must belong to a user."],
+  },
+});
+
+boxSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name photo",
+  });
+  next();
 });
 
 const Box = mongoose.model("Box", boxSchema);

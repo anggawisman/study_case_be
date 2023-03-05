@@ -5,6 +5,11 @@ const factory = require("./handlerFactory");
 const AppError = require("../utils/appError");
 const axios = require("axios");
 
+exports.setUserIds = (req, res, next) => {
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};
+
 // COMMON FUNCTION USE FACTORY(handlerFactory)
 // Check notes from Sir Irwin to explain how it works
 exports.createBox = factory.createOne(Box);

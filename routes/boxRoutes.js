@@ -9,7 +9,7 @@ router.get("/", boxController.getAllBoxes);
 router.use(authController.protect);
 
 // INBOUND CREATE BOX WITH PRODUCT DATA FROM API
-router.post("/product/:productCode", boxController.inbound);
+router.post("/product/:productCode", boxController.setUserIds, boxController.inbound);
 
 // API ROBOT CALLING
 router.patch("/:boxCode/inbound/station/:stationName", boxController.callRobotInbound);

@@ -2,10 +2,11 @@ const express = require("express");
 const morgan = require("morgan");
 
 // -------- REQUIRE SECURITY -------- //
-// const helmet = require('helmet');
-// const mongoSanitize = require('express-mongo-sanitize');
-// const xss = require('xss-clean');
-// const hpp = require('hpp');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 
 // -------- REQUIRE CUSTOM MODULE -------- //
 const globalErrorHandler = require("./controllers/errorController");
@@ -25,6 +26,14 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+// SECURITY
+// limit if too many request from same IP
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!',
+});
+
 // Body parser, reading data from body into req.body
 app.use(
   express.json({
@@ -32,12 +41,6 @@ app.use(
   })
 );
 
-// // Test middleware
-// app.use((req, res, next) => {
-//     req.requestTime = new Date().toISOString();
-//     // console.log(req.headers);
-//     next();
-// });
 
 // -------------- ROUTES -------------------- //
 // API Routes is divide it to routes folder

@@ -1,8 +1,12 @@
-const crypto = require("crypto");
 const mongoose = require("mongoose");
 // Validator for email
 const validator = require("validator");
+
+// SECURITY: This way, the attacker can't at least  steal our users' passwords and also can't reset them.
+// Strongly encrypt password with salt and hash Hashing is a one-way process that converts a password to ciphertext using hash algorithms. A hashed password cannot be decrypted, but a hacker can try to reverse engineer it. Password salting adds random characters before or after a password prior to hashing to obfuscate the actual password.
 const bcrypt = require("bcryptjs");
+// Strongly encrypt password with SHA 256, it's default module from node.js no need to install it. SHA-256 stands for Secure Hash Algorithm 256-bit and it's used for cryptographic security
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
   name: {

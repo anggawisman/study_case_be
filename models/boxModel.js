@@ -29,17 +29,27 @@ const boxSchema = new mongoose.Schema({
   lastCallBy: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
-    required: [true, "Review must belong to a user."],
+    required: [true, "last call must belong to a user."],
   },
+}, {
+  // toJSON: { virtuals: true }
 });
+
+// I WANNA REF THE PARENTS SO BOX MODEL CAN KNOW WHO IS THEIR CHILDREN USING VIRTUAL POPULATE, SO WE DONT NEED TO FIND THE RACK AGAIN IN BOXCONTROLLER WHILE PATCH IT, BUT IT'S NOT WORKS YET
+boxSchema.virtual('racks', {
+  ref: 'Rack',
+  foreignField: 'content',
+  localField: '_id'
+})
 
 boxSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "user",
-    select: "name photo",
+    path: "lastCallBy",
+    select: "name role",
   });
   next();
 });
+
 
 const Box = mongoose.model("Box", boxSchema);
 module.exports = Box;

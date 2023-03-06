@@ -5,10 +5,16 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const sendEmail = require('../utils/email');
 const crypto = require('crypto');
-const exp = require('constants');
-const { create } = require('../models/userModel');
 
 const signToken = (id) =>
+  // jwt.sign(payload, secretOrPrivateKey, [options, callback])
+
+  // Payload contains the claims. Claims are statements about an entity (typically, the user) and additional data. {id}: Only want entity of user Id
+
+  // JWT_SECRET: The algorithm ( HS256 ) used to sign the JWT means that the secret is a symmetric key that is known by both the sender and the receiver. It is negotiated and distributed out of band. Hence, if you're the intended recipient of the token, the sender should have provided you with the secret out of band.
+
+  // JWT_EXPIRES_IN: For logging out a user after a certain period of time. Treated as milliseconds.
+
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
@@ -20,12 +26,17 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
 
+    // A cookie with the Secure attribute is only sent to the server with an encrypted request over the HTTPS protocol. It's never sent with unsecured HTTP (except on localhost), which means man-in-the-middle attackers can't access it easily. Insecure sites (with http: in the URL) can't set cookies with the Secure attribute. However, don't assume that Secure prevents all access to sensitive information in cookies. For example, someone with access to the client's hard disk (or JavaScript if the HttpOnly attribute isn't set) can read and modify the information.
+
     // secure: true, // cookie will be sent only on an encrypted connection (HTTPS)
+
     httpOnly: true, // cookie cant be accessed or modified in any way by the browser prevent cross-site scripting attacks
   };
 
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; // will set secure to true if in the production environment
 
+  // SEND COOKIE
+  // res.cookie("name-of-cookie", data-wanna-send, options-of-cookie)
   res.cookie('jwt', token, cookieOptions);
 
   // remove password from output
@@ -33,6 +44,7 @@ const createSendToken = (user, statusCode, res) => {
 
   res.status(statusCode).json({
     status: 'success',
+    // JWT.SIGN here we send token to client
     token,
     data: {
       user,
@@ -47,9 +59,9 @@ exports.signUp = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
     passwordChangedAt: req.body.passwordChangedAt,
-    role: req.body.role,
 
-    // req.body
+    // Basically we only allow the data that we actually need to be put into the new user. no longer register as an admin. So if want to add admin we should direct to database
+    // role: req.body.role,
   });
 
   createSendToken(newUser, 201, res);
@@ -123,17 +135,17 @@ exports.protect = catchAsync(async (req, res, next) => {
 // EXAMPLE FOR FUNCTION THAT PASS ARGUMENTS
 exports.restrictTo =
   (...roles) =>
-  (req, res, next) => {
-    // roles ['admin', 'lead-guide']
+    (req, res, next) => {
+      // roles ['admin', 'lead-guide']
 
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError('You do not have permission to perform this action', 403)
-      );
-    }
+      if (!roles.includes(req.user.role)) {
+        return next(
+          new AppError('You do not have permission to perform this action', 403)
+        );
+      }
 
-    next();
-  };
+      next();
+    };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email

@@ -5,7 +5,8 @@ const validator = require("validator");
 // SECURITY: This way, the attacker can't at least  steal our users' passwords and also can't reset them.
 // Strongly encrypt password with salt and hash Hashing is a one-way process that converts a password to ciphertext using hash algorithms. A hashed password cannot be decrypted, but a hacker can try to reverse engineer it. Password salting adds random characters before or after a password prior to hashing to obfuscate the actual password.
 const bcrypt = require("bcryptjs");
-// Strongly encrypt password with SHA 256, it's default module from node.js no need to install it. SHA-256 stands for Secure Hash Algorithm 256-bit and it's used for cryptographic security
+
+// Strongly encrypt password with SHA 256, it's built-in module from node.js no need to install it. SHA-256 stands for Secure Hash Algorithm 256-bit and it's used for cryptographic security
 const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
@@ -48,7 +49,9 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: { type: Date },
+  // To compare with reset token hash by crypto, so its saved here
   passwordResetToken: String,
+  // To expire the reset after a time
   passwordResetExpires: Date,
 
   active: {
@@ -94,7 +97,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
 
-    console.log(changedTimestamp, JWTTimestamp);
+    // console.log(changedTimestamp, JWTTimestamp);
     return JWTTimestamp < changedTimestamp;
   }
 
@@ -107,7 +110,7 @@ userSchema.methods.createPasswordResetToken = function () {
 
   this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
-  console.log({ resetToken }, this.passwordResetToken);
+  // console.log({ resetToken }, this.passwordResetToken);
 
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 

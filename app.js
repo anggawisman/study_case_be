@@ -21,23 +21,53 @@ const userRouter = require("./routes/userRoutes");
 const app = express();
 
 // ------------------- MIDDLEWARE -------------------- //
+
+//Its Security middleware but its should be in the first middleware
+// Set Security HTTP headers: Using helmet are quick and simple way to create a layer of security by switching from Express defaults to a more secure set of defaults
+app.use(helmet());
+
 // Development logging | morgan will logs HTTP requests
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// SECURITY
+// Body parser, reading data from body into req.body
+app.use(
+  express.json({
+    // LIMIT BODY PAYLOAD HERE
+    limit: "10kb",
+  })
+);
+
+// ------------------- SECURITY MIDDLEWARE -------------------- //
+
+
 // limit if too many request from same IP
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
 });
+app.use('/api', limiter);
 
-// Body parser, reading data from body into req.body
+// Data Sanitization againts XSS: sanitize user input coming from POST body, GET queries, and url params.
+app.use(xss());
+
+// Data Sanitization againts NoSQL query injection
+// Object keys starting with a $ or containing a . are reserved for use by MongoDB as operators. Without this sanitization, malicious users could send an object containing a $ operator, or including a ., which could change the context of a database operation. Most notorious is the $where operator, which can execute arbitrary JavaScript on the database.
+app.use(mongoSanitize());
+
+// Prevent Parameter Pollution
+// Should in the end of middleware because it does to clear up query string
+
+// GET/ search? boxCode=BC1412421&boxCode=312332
+// HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value. You add the middleware and you are done.
+// actually it's not implemented here yet
 app.use(
-  express.json({
-    limit: "10kb",
+  hpp({
+    whitelist: [
+
+    ],
   })
 );
 

@@ -1,3 +1,4 @@
+// here we call the Box Model
 const Box = require(`../models/boxModel`);
 const Rack = require(`../models/rackModel`);
 const catchAsync = require("../utils/catchAsync");
@@ -7,7 +8,7 @@ const axios = require("axios");
 
 // COMMON FUNCTION USE FACTORY(handlerFactory)
 // Check notes from Sir Irwin to explain how it works
-exports.createBox = factory.createOne(Box);
+// exports.createBox = factory.createOne(Box);
 exports.getBox = factory.getOne(Box);
 exports.getAllBoxes = factory.getAll(Box);
 

@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please tell us your name!"],
+    // if there is space after or before string will deleted
     trim: true,
   },
   email: {
@@ -20,6 +21,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please provide your email"],
     unique: true,
     lowercase: true,
+    // validate the email with package validator
     validate: [validator.isEmail, "Please provide a valid email"],
   },
   photo: {
@@ -27,9 +29,9 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    // So enum creates a validator and checks if the value is given in an array
     enum: ["operator", "admin"],
     default: "operator",
-    // required:
   },
   password: {
     type: String,

@@ -50,6 +50,7 @@ boxSchema.pre(/^find/, function (next) {
   next();
 });
 
-
+// define for model
+// const name-of-model = mongoose.model("name-of-index(will automatically assign as multiple noun)", model-schema)
 const Box = mongoose.model("Box", boxSchema);
 module.exports = Box;

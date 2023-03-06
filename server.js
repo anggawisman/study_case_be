@@ -41,7 +41,7 @@ const server = app.listen(port, () => {
 });
 
 
-// ---------------------- HANDLE ERROR OUTSIDE EXPRESS: UNDHANDLE REJECTION ---------------------------- //
+// -------------- HANDLE ERROR OUTSIDE EXPRESS: UNDHANDLE REJECTION ----------------- //
 process.on('unhandledRejection', (err) => {
     console.log(err.name, err.message);
     console.log('UNHANDLER REJECTION !!! Shuting down...');

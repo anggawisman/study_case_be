@@ -6,9 +6,19 @@ const factory = require("./handlerFactory");
 const AppError = require("../utils/appError");
 const axios = require("axios");
 
+// For know it's not necessary
+// exports.setUserIds = (req, res, next) => {
+//     // It's allow nested routes
+//     if (!req.body.user) req.body.user = req.user.id;
+
+//     // After processing the request, it calls the next function to pass control to the next middleware function in the chain.
+//     next();
+// }
+
+
 // COMMON FUNCTION USE FACTORY(handlerFactory)
-// Check notes from Sir Irwin to explain how it works
-// exports.createBox = factory.createOne(Box);
+
+//To define virtual populate 
 exports.getBox = factory.getOne(Box, { path: "racks", select: "rackCode index -content" });
 exports.getAllBoxes = factory.getAll(Box);
 
@@ -29,7 +39,6 @@ exports.inbound = catchAsync(async (req, res, next) => {
             nameComponent: productDetail.nameComponent,
             material: productDetail.material,
         },
-        // in_station: station.split('-').join(" ").toUpperCase(),
         status: "process",
         lastCallBy: req.user.id
     });

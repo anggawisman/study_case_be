@@ -1,5 +1,7 @@
 // BUILD QUERY
 class APIFeatures {
+  // query contain mongoose query
+  // queryString contain query string from express
   constructor(query, queryString) {
     this.query = query;
     this.queryString = queryString;
@@ -16,6 +18,7 @@ class APIFeatures {
 
     this.query = this.query.find(JSON.parse(queryStr));
 
+    // Return the entire object then has access to other methods
     return this;
   }
 

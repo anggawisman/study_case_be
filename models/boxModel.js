@@ -42,6 +42,7 @@ boxSchema.virtual('racks', {
   localField: '_id'
 })
 
+// This middleware will run when we access the find query, before the others query run this function will be run firs
 boxSchema.pre(/^find/, function (next) {
   this.populate({
     path: "lastCallBy",

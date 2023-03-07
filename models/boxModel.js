@@ -23,26 +23,26 @@ const boxSchema = new mongoose.Schema({
       values: ["process", "in_storage", "out"],
       message: "Status is either: process, in_storage, or out",
     },
-  },
 
-  // CHECK IT ASAP
+  },
   lastCallBy: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
     required: [true, "last call must belong to a user."],
   },
 }, {
-  // toJSON: { virtuals: true }
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 });
 
 // I WANNA REF THE PARENTS SO BOX MODEL CAN KNOW WHO IS THEIR CHILDREN USING VIRTUAL POPULATE, SO WE DONT NEED TO FIND THE RACK AGAIN IN BOXCONTROLLER WHILE PATCH IT, BUT IT'S NOT WORKS YET
 boxSchema.virtual('racks', {
   ref: 'Rack',
+  localField: '_id',
   foreignField: 'content',
-  localField: '_id'
-})
+});
 
-// This middleware will run when we access the find query, before the others query run this function will be run firs
+// This middleware will run when we access the find query, before the others query run this function will be run first
 boxSchema.pre(/^find/, function (next) {
   this.populate({
     path: "lastCallBy",

@@ -22,6 +22,9 @@ const rackSchema = new mongoose.Schema({
     ref: "Box",
     unique: true,
   },
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 });
 
 // QUERY MIDDLEWARE

@@ -9,7 +9,7 @@ const axios = require("axios");
 // COMMON FUNCTION USE FACTORY(handlerFactory)
 // Check notes from Sir Irwin to explain how it works
 // exports.createBox = factory.createOne(Box);
-exports.getBox = factory.getOne(Box);
+exports.getBox = factory.getOne(Box, { path: "racks", select: "rackCode index -content" });
 exports.getAllBoxes = factory.getAll(Box);
 
 // CUSTOM FUNCTION LOGIC

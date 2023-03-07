@@ -46,5 +46,11 @@ rackSchema.post(/^find/, function (docs, next) {
   next();
 });
 
+// method for DEFINE RACK THAT EMPTY AND THE LOWEST INDEX
+rackSchema.methods.defineRack = function () {
+  this.find({ content: null }).sort({ index: 1 }).limit(1)
+  return true
+}
+
 const Rack = mongoose.model("Rack", rackSchema);
 module.exports = Rack;

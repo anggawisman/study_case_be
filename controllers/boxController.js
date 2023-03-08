@@ -54,8 +54,8 @@ exports.callRobotInbound = catchAsync(async (req, res, next) => {
     const { boxCode, stationName } = req.params;
 
     // DEFINE RACK THAT EMPTY AND THE LOWEST INDEX
-    // const rack = await Rack.find({ content: null }).sort({ index: 1 }).limit(1);
-    const rack = await Rack.defineRack();
+    const rack = await Rack.find({ content: null }).sort({ index: 1 }).limit(1);
+    // const rack = await Rack.defineRack();
 
     // PREVENT RACK FULL
     if (!rack.rackCode) { return next(new AppError("All Racks is full", 404)); }
